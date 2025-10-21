@@ -12,7 +12,7 @@ while (1):
     frame = cv2.resize(frame, (400, 300))
 
 
-    # Calculation of Sobelx
+    # Calculation of Sobelx uvyv
     sobel = cv2.Sobel(frame, cv2.CV_8U, 1, 1, ksize=3)
 
     cv2.imshow('original', frame)
