@@ -1,6 +1,6 @@
 import cv2
 
-cap = cv2.VideoCapture("imgs/tráfico01.mp4")
+cap = cv2.VideoCapture("trafico.mp4")
 
 while (1):
 
