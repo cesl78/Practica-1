@@ -13,6 +13,5 @@ while (1):
     if k == 27:
         break
 
-cv2.destroyAllWindows()
-
 cap.release()
+cv2.destroyAllWindows()
