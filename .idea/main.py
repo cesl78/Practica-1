@@ -65,7 +65,7 @@ def calcular_fondo_median(video_path, n_samples=60, scale=1.0):
 # ---------- 2. Clase Track para cada coche ----------
 
 class Track:
-    def _init_(self, track_id, cx, cy):
+    def __init__(self, track_id, cx, cy):
         self.id = track_id
         self.cx = cx
         self.cy = cy
