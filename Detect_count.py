@@ -43,6 +43,8 @@ class VehicleCounter:
 
         self.tracks = []
         self.next_id = 0
+        self.cnt_up = 0
+        self.cnt_down = 0
         self.conteo = 0
 
     def _en_carriles_validos(self, cx, cy):
@@ -128,21 +130,34 @@ class VehicleCounter:
             # --- Conteo ---
             for t in self.tracks:
                 if not t.counted and t.visible_frames >= self.min_visible_frames:
+                    desplazamiento = t.cy - t.start_cy
                     # Filtro de movimiento mínimo para evitar ruidos fijos
-                    if abs(t.cy - t.start_cy) > 5 or t.visible_frames > 5:
+                    if abs(desplazamiento) > 5 or t.visible_frames > 5:
                         t.counted = True
+                        if desplazamiento > 0:
+                            self.cnt_down += 1
+                        else:
+                            self.cnt_up += 1
                         self.conteo += 1
 
             # --- Visualización ---
             for (x, y, w, h, cx, cy) in detecciones:
                 cv2.rectangle(frame_color, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-            cv2.putText(frame_color, f"Conteo: {self.conteo}", (50, 50),
-                        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 3)
+            # --- Mostrar contadores ---
+            # Total
+            cv2.putText(frame_color, f"Total: {self.conteo}", (50, 50),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 255), 3)
+            # Suben
+            cv2.putText(frame_color, f"Suben: {self.cnt_up}", (50, 100),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 50, 50), 3)
+            # Bajan
+            cv2.putText(frame_color, f"Bajan: {self.cnt_down}", (50, 150),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.2, (50, 50, 255), 3)
 
             cv2.imshow("Deteccion Final", frame_color)
             if cv2.waitKey(1) & 0xFF == 27: break
 
         cap.release()
         cv2.destroyAllWindows()
-        print(f"Resultado final: {self.conteo}")
+        print(f"Resultado final -> Total: {self.conteo}, Suben: {self.cnt_up}, Bajan: {self.cnt_down}")
